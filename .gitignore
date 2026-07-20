@@ -1,0 +1,29 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+
+# VS Code
+.vscode/
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Uploaded resumes
+data/resumes/*
+!data/resumes/.gitkeep
+
+# Generated reports
+data/reports/*
+!data/reports/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db

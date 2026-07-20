@@ -1,0 +1,6 @@
+PyMuPDF
+python-docx
+google-genai
+python-dotenv
+streamlit
+reportlab
