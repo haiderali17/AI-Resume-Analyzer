@@ -1,29 +1,30 @@
-# Environment
-.env
-
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 
-# Virtual environments
+# Virtual Environment
 venv/
 .venv/
+env/
+
+# Environment Variables
+.env
+
+# Streamlit Secrets
+.streamlit/secrets.toml
+
+# Logs
+logs/
+!logs/.gitkeep
+
+# Generated Reports
+data/reports/*
+!data/reports/.gitkeep
 
 # VS Code
 .vscode/
 
-# Logs
-logs/*
-!logs/.gitkeep
-
-# Uploaded resumes
-data/resumes/*
-!data/resumes/.gitkeep
-
-# Generated reports
-data/reports/*
-!data/reports/.gitkeep
-
-# OS files
+# OS Files
 .DS_Store
 Thumbs.db

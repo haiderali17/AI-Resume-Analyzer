@@ -1,0 +1,530 @@
+/* ======================================================
+   AI Resume Analyzer - Premium UI
+   Theme: OpenAI + Linear + Vercel
+====================================================== */
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ======================================================
+   GLOBAL
+====================================================== */
+
+html,
+body,
+[class*="css"]{
+    font-family:'Inter',sans-serif;
+}
+
+#MainMenu,
+header,
+footer{
+    visibility:hidden;
+}
+
+.stApp{
+    background:
+        linear-gradient(
+        135deg,
+        #020617,
+        #0f172a,
+        #111827
+    );
+}
+
+.block-container{
+    max-width:1200px;
+    padding-top:45px;
+    padding-bottom:45px;
+}
+
+/* ======================================================
+   HERO SECTION
+====================================================== */
+
+.hero{
+
+    background:rgba(255,255,255,.06);
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:30px;
+
+    padding:60px;
+
+    text-align:center;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35);
+
+    transition:.35s;
+
+}
+
+.hero:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45);
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    background:rgba(96,165,250,.12);
+
+    color:#7dd3fc;
+
+    border:1px solid rgba(96,165,250,.25);
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+.title{
+
+    margin-top:20px;
+
+    margin-bottom:18px;
+
+    font-size:58px;
+
+    font-weight:900;
+
+    line-height:1.2;
+
+    background:
+        linear-gradient(
+        90deg,
+        #60a5fa,
+        #22d3ee
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}
+
+.subtitle{
+
+    color:#cbd5e1;
+
+    font-size:20px;
+
+    line-height:1.8;
+
+    max-width:820px;
+
+    margin:auto;
+
+}
+
+/* ======================================================
+   FEATURE PILLS
+====================================================== */
+
+.features{
+
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:16px;
+
+    margin-top:35px;
+
+    margin-bottom:35px;
+
+}
+
+.feature-pill{
+
+    padding:12px 22px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.feature-pill:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#60a5fa;
+
+    background:rgba(96,165,250,.18);
+
+    box-shadow:
+        0 10px 30px rgba(96,165,250,.20);
+
+}
+
+/* ======================================================
+   METRIC CARDS
+====================================================== */
+
+[data-testid="metric-container"]{
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.25);
+
+    transition:.3s;
+
+}
+
+[data-testid="metric-container"]:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#60a5fa;
+
+    box-shadow:
+        0 20px 45px rgba(96,165,250,.20);
+
+}
+
+/* ======================================================
+   FILE UPLOADER
+====================================================== */
+
+[data-testid="stFileUploader"]{
+
+    background:rgba(255,255,255,.05);
+
+    border:2px dashed #60a5fa;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    transition:.3s;
+
+}
+
+[data-testid="stFileUploader"]:hover{
+
+    background:rgba(96,165,250,.08);
+
+    border-color:#22d3ee;
+
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+
+.stButton>button{
+
+    width:100%;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:16px;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    background:
+        linear-gradient(
+        90deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    transition:.3s;
+
+    box-shadow:
+        0 15px 35px rgba(37,99,235,.35);
+
+}
+
+.stButton>button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 20px 45px rgba(37,99,235,.45);
+
+}
+
+.stDownloadButton>button{
+
+    width:100%;
+
+    height:56px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+        90deg,
+        #16a34a,
+        #22c55e
+    );
+
+    color:white;
+
+    font-weight:700;
+
+    font-size:17px;
+
+}
+
+.stDownloadButton>button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* ======================================================
+   DIVIDER
+====================================================== */
+
+hr{
+
+    border:none;
+
+    height:1px;
+
+    background:rgba(255,255,255,.08);
+
+    margin:35px 0;
+
+}
+
+/* ======================================================
+UPLOAD CARD
+====================================================== */
+
+.upload-card{
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.08);
+
+border-radius:24px;
+
+padding:45px;
+
+text-align:center;
+
+margin-top:40px;
+
+margin-bottom:20px;
+
+backdrop-filter:blur(18px);
+
+transition:.3s;
+
+}
+
+.upload-card:hover{
+
+transform:translateY(-5px);
+
+border-color:#60a5fa;
+
+box-shadow:0 20px 45px rgba(96,165,250,.20);
+
+}
+
+.upload-icon{
+
+font-size:58px;
+
+margin-bottom:15px;
+
+}
+
+.upload-card h2{
+
+color:white;
+
+font-size:32px;
+
+margin-bottom:12px;
+
+}
+
+.upload-card p{
+
+color:#cbd5e1;
+
+font-size:17px;
+
+line-height:1.8;
+
+}
+
+/* File Uploader */
+
+[data-testid="stFileUploader"]{
+
+background:rgba(255,255,255,.04);
+
+border:2px dashed #3b82f6;
+
+border-radius:18px;
+
+padding:20px;
+
+}
+
+[data-testid="stFileUploader"]:hover{
+
+border-color:#22d3ee;
+
+background:rgba(34,211,238,.06);
+
+}
+
+/* ======================================================
+   RESULTS CARD
+====================================================== */
+
+.result-card{
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:24px;
+
+    padding:30px;
+
+    margin-top:30px;
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+}
+
+.result-card h2{
+
+    color:white;
+
+    font-size:28px;
+
+    margin-bottom:20px;
+
+}
+
+.result-card h3{
+
+    color:#7dd3fc;
+
+    margin-top:20px;
+
+    margin-bottom:10px;
+
+    font-size:20px;
+
+}
+
+.result-card ul{
+
+    color:#cbd5e1;
+
+    padding-left:20px;
+
+}
+
+.result-card li{
+
+    margin-bottom:10px;
+
+    line-height:1.8;
+
+}
+
+/* ======================================================
+   METRIC TEXT FIX
+====================================================== */
+
+[data-testid="metric-container"]{
+    background:rgba(255,255,255,.06) !important;
+    border:1px solid rgba(255,255,255,.10) !important;
+    border-radius:18px;
+    padding:18px;
+}
+
+[data-testid="metric-container"] *{
+    color:#ffffff !important;
+}
+
+[data-testid="stMetricValue"]{
+    color:#ffffff !important;
+    font-size:38px !important;
+    font-weight:800 !important;
+}
+
+[data-testid="stMetricLabel"]{
+    color:#cbd5e1 !important;
+    font-size:16px !important;
+    font-weight:600 !important;
+}
+
+/* ===========================
+   RESULT TEXT FIX
+=========================== */
+
+.result-heading{
+    color:#ffffff !important;
+    font-size:30px !important;
+    font-weight:700 !important;
+    margin:25px 0 15px;
+}
+
+.result-item{
+    color:#ffffff !important;
+    font-size:18px !important;
+    font-weight:500 !important;
+    margin:10px 0;
+}
+
+.result-item *{
+    color:#ffffff !important;
+}

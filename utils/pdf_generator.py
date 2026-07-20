@@ -1,33 +1,216 @@
-from reportlab.platypus import SimpleDocTemplate, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from datetime import datetime
+
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import (
+    Paragraph,
+    SimpleDocTemplate,
+    Spacer,
+    Table,
+    TableStyle,
+)
 
 
 class PDFGenerator:
 
     def generate(self, analysis, output_path):
 
-        doc = SimpleDocTemplate(output_path)
+        doc = SimpleDocTemplate(
+            output_path,
+            rightMargin=40,
+            leftMargin=40,
+            topMargin=40,
+            bottomMargin=40,
+        )
+
         styles = getSampleStyleSheet()
+
+        # ==========================
+        # Styles
+        # ==========================
+
+        title_style = ParagraphStyle(
+            "TitleStyle",
+            parent=styles["Title"],
+            alignment=TA_CENTER,
+            fontSize=24,
+            textColor=colors.HexColor("#2563EB"),
+            spaceAfter=20,
+        )
+
+        heading_style = ParagraphStyle(
+            "HeadingStyle",
+            parent=styles["Heading2"],
+            fontSize=16,
+            textColor=colors.HexColor("#2563EB"),
+            spaceBefore=15,
+            spaceAfter=8,
+        )
+
+        normal_style = ParagraphStyle(
+            "NormalStyle",
+            parent=styles["Normal"],
+            fontSize=11,
+            leading=20,
+        )
+
+        footer_style = ParagraphStyle(
+            "FooterStyle",
+            parent=styles["Normal"],
+            alignment=TA_CENTER,
+            fontSize=9,
+            textColor=colors.grey,
+        )
 
         elements = []
 
-        elements.append(Paragraph("<b>AI Resume Analysis Report</b>", styles["Title"]))
-        elements.append(Paragraph(f"<b>ATS Score:</b> {analysis['ats_score']}/100", styles["Normal"]))
+        # ==========================
+        # Title
+        # ==========================
 
-        elements.append(Paragraph("<br/><b>Strengths</b>", styles["Heading2"]))
-        for item in analysis["strengths"]:
-            elements.append(Paragraph(f"• {item}", styles["Normal"]))
+        elements.append(
+            Paragraph(
+                "🤖 AI Resume Analysis Report",
+                title_style,
+            )
+        )
 
-        elements.append(Paragraph("<br/><b>Weaknesses</b>", styles["Heading2"]))
-        for item in analysis["weaknesses"]:
-            elements.append(Paragraph(f"• {item}", styles["Normal"]))
+        elements.append(Spacer(1, 10))
 
-        elements.append(Paragraph("<br/><b>Missing Skills</b>", styles["Heading2"]))
-        for item in analysis["missing_skills"]:
-            elements.append(Paragraph(f"• {item}", styles["Normal"]))
+        # ==========================
+        # ATS Score Box
+        # ==========================
 
-        elements.append(Paragraph("<br/><b>Suggestions</b>", styles["Heading2"]))
-        for item in analysis["suggestions"]:
-            elements.append(Paragraph(f"• {item}", styles["Normal"]))
+        score = analysis.get("ats_score", 0)
+
+        if score >= 90:
+            score_color = colors.HexColor("#16A34A")
+        elif score >= 75:
+            score_color = colors.HexColor("#2563EB")
+        elif score >= 60:
+            score_color = colors.HexColor("#F59E0B")
+        else:
+            score_color = colors.HexColor("#DC2626")
+
+        score_table = Table(
+            [[f"ATS SCORE : {score}/100"]],
+            colWidths=[450],
+        )
+
+        score_table.setStyle(
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, -1), score_color),
+                    ("TEXTCOLOR", (0, 0), (-1, -1), colors.white),
+                    ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                    ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
+                    ("FONTSIZE", (0, 0), (-1, -1), 18),
+                    ("TOPPADDING", (0, 0), (-1, -1), 12),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+                ]
+            )
+        )
+
+        elements.append(score_table)
+        elements.append(Spacer(1, 20))
+
+        # ==========================
+        # Helper Function
+        # ==========================
+
+        def add_section(title, items):
+
+            elements.append(
+                Paragraph(
+                    title,
+                    heading_style,
+                )
+            )
+
+            if items:
+
+                for item in items:
+                    elements.append(
+                        Paragraph(
+                            f"• {item}",
+                            normal_style,
+                        )
+                    )
+
+            else:
+
+                elements.append(
+                    Paragraph(
+                        "No information available.",
+                        normal_style,
+                    )
+                )
+
+            elements.append(Spacer(1, 10))
+
+            line = Table([[""]], colWidths=[450])
+
+            line.setStyle(
+                TableStyle(
+                    [
+                        ("LINEBELOW", (0, 0), (-1, -1), 1, colors.lightgrey),
+                    ]
+                )
+            )
+
+            elements.append(line)
+            elements.append(Spacer(1, 8))
+
+        # ==========================
+        # Sections
+        # ==========================
+
+        add_section(
+            "💪 Strengths",
+            analysis.get("strengths", []),
+        )
+
+        add_section(
+            "⚠️ Weaknesses",
+            analysis.get("weaknesses", []),
+        )
+
+        add_section(
+            "🎯 Missing Skills",
+            analysis.get("missing_skills", []),
+        )
+
+        add_section(
+            "💡 Suggestions",
+            analysis.get("suggestions", []),
+        )
+
+        # ==========================
+        # Footer
+        # ==========================
+
+        elements.append(Spacer(1, 20))
+
+        elements.append(
+            Paragraph(
+                "<b>Generated by AI Resume Analyzer</b>",
+                footer_style,
+            )
+        )
+
+        elements.append(
+            Paragraph(
+                "Powered by Groq • Streamlit • Python",
+                footer_style,
+            )
+        )
+
+        elements.append(
+            Paragraph(
+                datetime.now().strftime("%d %B %Y | %I:%M %p"),
+                footer_style,
+            )
+        )
 
         doc.build(elements)

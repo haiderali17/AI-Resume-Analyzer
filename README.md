@@ -1,85 +1,139 @@
 # 🤖 AI Resume Analyzer
 
-An AI-powered Resume Analyzer built with **Python**, **Streamlit**, and **Google Gemini AI**. Upload your resume and receive intelligent feedback, ATS analysis, strengths, weaknesses, improvement suggestions, and a professionally formatted PDF report.
+An AI-powered Resume Analyzer built with **Python, Streamlit, and Groq (Llama 3.3 70B)** that evaluates resumes, calculates an ATS score, identifies strengths and weaknesses, highlights missing skills, provides personalized improvement suggestions, and generates a professional PDF report.
+
+---
+
+## 🚀 Live Demo
+
+> **Live App:** 
+
+---
+
+## 📸 Screenshots
+[Home](assets/home.png)
+
+![Analysis](assets/analysis.png)
+
+![Report](assets/report.png)
+
+
+### 🏠 Home Page
+
+_Add screenshot here_
+
+---
+
+### 📊 Resume Analysis
+
+_Add screenshot here_
+
+---
+
+### 📄 Generated PDF Report
+
+_Add screenshot here_
 
 ---
 
 ## ✨ Features
 
-- 📄 Upload Resume (PDF/DOCX)
-- 🤖 AI Resume Analysis using Google Gemini
-- 📊 ATS-Friendly Resume Evaluation
-- 💪 Strengths & Weaknesses Detection
+- 📄 Upload Resume (PDF & DOCX)
+- 🤖 AI-Powered Resume Analysis using Groq (Llama 3.3 70B)
+- 📊 ATS Score Calculation
+- 💪 Strengths Identification
+- ⚠️ Weaknesses Detection
+- 🎯 Missing Skills Detection
 - 💡 Personalized Improvement Suggestions
-- 📥 Download Analysis Report as PDF
-- 🎨 Clean and Responsive Streamlit Interface
+- 📥 Download Professional PDF Report
+- 🎨 Modern Dark UI
+- ⚡ Fast AI Responses
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-- Python
-- Streamlit
-- Google Gemini API
-- PyMuPDF
-- python-docx
-- ReportLab
-- python-dotenv
+| Technology | Purpose |
+|------------|---------|
+| Python | Backend |
+| Streamlit | Web Application |
+| Groq API | AI Resume Analysis |
+| Llama 3.3 70B | Large Language Model |
+| PyMuPDF | PDF Text Extraction |
+| python-docx | DOCX Text Extraction |
+| ReportLab | PDF Report Generation |
+| HTML/CSS | UI Styling |
 
 ---
 
 ## 📂 Project Structure
 
-```
-ai_resume_analyzer/
+```text
+AI-Resume-Analyzer/
 │
 ├── app.py
-├── config.py
 ├── requirements.txt
 ├── README.md
+├── .gitignore
 │
 ├── services/
-│   ├── gemini_service.py
+│   ├── groq_service.py
 │   └── resume_service.py
 │
 ├── utils/
 │   ├── file_handler.py
-│   ├── logger.py
-│   └── pdf_generator.py
+│   ├── pdf_generator.py
+│   └── logger.py
+│
+├── styles/
+│   └── style.css
 │
 ├── data/
-│   ├── resumes/
 │   └── reports/
 │
-└── logs/
+└── assets/
+    ├── home.png
+    ├── analysis.png
+    └── report.png
 ```
 
 ---
 
 ## ⚙️ Installation
 
-### Clone the repository
+### Clone Repository
 
 ```bash
-git clone https://github.com/haiderali17/AI-Resume-Analyzer.git
+git clone https://github.com/yourusername/AI-Resume-Analyzer.git
+```
+
+```bash
 cd AI-Resume-Analyzer
 ```
 
 ### Create Virtual Environment
 
-Windows
+#### Windows
 
 ```bash
 python -m venv venv
+```
+
+```bash
 venv\Scripts\activate
 ```
 
-Linux / macOS
+#### Linux / macOS
 
 ```bash
 python3 -m venv venv
+```
+
+```bash
 source venv/bin/activate
 ```
+
+---
 
 ### Install Dependencies
 
@@ -89,17 +143,17 @@ pip install -r requirements.txt
 
 ---
 
-## 🔑 Environment Variables
+### Create Environment Variables
 
 Create a `.env` file in the project root.
 
 ```env
-GEMINI_API_KEY=YOUR_API_KEY
+GROQ_API_KEY=YOUR_GROQ_API_KEY
 ```
 
 ---
 
-## ▶️ Run the Application
+### Run Application
 
 ```bash
 streamlit run app.py
@@ -107,20 +161,26 @@ streamlit run app.py
 
 ---
 
-## 📷 Screenshots
+## 📄 Sample Workflow
 
-You can add screenshots here after deployment.
+1. Upload Resume (PDF/DOCX)
+2. AI Extracts Resume Content
+3. Groq Llama 3.3 Analyzes Resume
+4. ATS Score is Generated
+5. Strengths & Weaknesses are Identified
+6. Missing Skills are Highlighted
+7. Improvement Suggestions are Generated
+8. Download Professional PDF Report
 
 ---
 
-## 📌 Future Improvements
+## 🎯 Future Improvements
 
-- Resume Score (0–100)
+- Resume Keyword Matching
+- Resume Preview
 - Job Description Matching
-- Multiple Resume Comparison
-- Dark Mode
-- Resume Templates
-- Cover Letter Generator
+- Multi-language Support
+- Resume Comparison
 
 ---
 
@@ -128,13 +188,12 @@ You can add screenshots here after deployment.
 
 **Haider Ali**
 
-BS Information Technology Student | AI & Machine Learning Enthusiast
+BS Information Technology Student
 
-GitHub:
-https://github.com/haiderali17
+Interested in AI Engineering, Machine Learning, and Automation.
 
 ---
 
 ## ⭐ Support
 
-If you found this project useful, consider giving it a ⭐ on GitHub.
+If you found this project helpful, please consider giving it a ⭐ on GitHub.

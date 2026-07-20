@@ -1,345 +1,305 @@
 import os
 import tempfile
+
 import streamlit as st
+
 from services.resume_service import ResumeService
-# -----------------------------
-# Page Configuration
-# -----------------------------
+
+
+# =====================================================
+# PAGE CONFIGURATION
+# =====================================================
+
 st.set_page_config(
     page_title="AI Resume Analyzer",
-    page_icon="📄",
-    layout="wide"
+    page_icon="🤖",
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+
+
+# =====================================================
+# LOAD CSS
+# =====================================================
+
+def load_css():
+
+    with open("styles/style.css", "r", encoding="utf-8") as css_file:
+
+        st.markdown(
+
+            f"<style>{css_file.read()}</style>",
+
+            unsafe_allow_html=True
+
+        )
+
+
+load_css()
+
+
+# =====================================================
+# INITIALIZE SERVICES
+# =====================================================
 
 resume_service = ResumeService()
 
-# -----------------------------
-# Custom CSS
-# -----------------------------
-st.markdown("""
-<style>
 
-/* ===========================
-   Background
-=========================== */
+# =====================================================
+# HERO SECTION
+# =====================================================
 
-.stApp{
-    background:#eef2f7;
-}
+def render_hero():
 
-/* Main Container */
-.block-container{
-    background:white;
-    padding:2.5rem;
-    border-radius:18px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
-    margin-top:30px;
-    margin-bottom:30px;
-}
+    st.markdown(
 
-/* Hide Streamlit Branding */
-#MainMenu{
-    visibility:hidden;
-}
-footer{
-    visibility:hidden;
-}
-header{
-    visibility:hidden;
-}
+        """
+<div class="hero">
 
-/* ===========================
-   Typography
-=========================== */
+<div class="badge">
+⚡ Powered by Groq • Llama 3.3 70B
+</div>
 
-.main-title{
-    text-align:center;
-    font-size:44px;
-    font-weight:700;
-    color:#1f2937;
-    margin-bottom:8px;
-}
-
-.subtitle{
-    text-align:center;
-    font-size:18px;
-    color:#6b7280;
-    margin-bottom:35px;
-}
-
-/* ===========================
-   Upload Box
-=========================== */
-
-[data-testid="stFileUploader"]{
-    border:2px dashed #cbd5e1;
-    border-radius:14px;
-    background:#f8fafc;
-    padding:18px;
-}
-
-/* ===========================
-   Buttons
-=========================== */
-
-.stButton>button{
-
-    width:100%;
-    background:#2563eb;
-    color:white;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:600;
-    padding:12px;
-
-    transition:0.25s;
-}
-
-.stButton>button:hover{
-
-    background:#1d4ed8;
-    transform:translateY(-2px);
-
-}
-
-/* Download Button */
-
-.stDownloadButton>button{
-
-    width:100%;
-    background:#16a34a;
-    color:white;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:600;
-    padding:12px;
-
-}
-
-.stDownloadButton>button:hover{
-
-    background:#15803d;
-
-}
-
-/* ===========================
-   ATS Score Card
-=========================== */
-
-[data-testid="metric-container"]{
-
-    background:#f8fafc;
-
-    border:1px solid #e5e7eb;
-
-    border-radius:14px;
-
-    padding:20px;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.05);
-
-}
-
-/* Progress */
-
-.stProgress>div>div{
-
-    background:#22c55e;
-
-}
-
-/* ===========================
-   Result Cards
-=========================== */
-
-[data-testid="stVerticalBlockBorderWrapper"]{
-
-    background:white;
-
-    border-radius:14px;
-
-    border:1px solid #e5e7eb;
-
-    padding:16px;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.05);
-
-}
-
-/* Divider */
-
-hr{
-    margin-top:25px;
-    margin-bottom:25px;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# -----------------------------
-# Header
-# -----------------------------
-st.markdown("""
-<div class="main-title">
-📄 AI Resume Analyzer
+<div class="title">
+🤖 AI Resume Analyzer
 </div>
 
 <div class="subtitle">
-Get an AI-powered ATS analysis of your resume using Google Gemini.
+Upload your resume and receive an AI-powered ATS analysis,
+missing skills,
+personalized feedback,
+and professional improvement suggestions in seconds.
+</div>
+
+</div>
+""",
+
+        unsafe_allow_html=True
+
+    )
+
+
+
+# =====================================================
+# FEATURES SECTION
+# =====================================================
+
+def render_features():
+
+    st.markdown("""
+<div class="features">
+
+<div class="feature-pill">📊 ATS Score</div>
+
+<div class="feature-pill">🧠 AI Feedback</div>
+
+<div class="feature-pill">🎯 Missing Skills</div>
+
+<div class="feature-pill">📄 PDF Report</div>
+
+</div>
+""", unsafe_allow_html=True)
+    
+    # =====================================================
+# UPLOAD SECTION
+# =====================================================
+
+def render_upload():
+
+    st.markdown("""
+<div class="upload-card">
+
+<div class="upload-icon">
+📄
+</div>
+
+<h2>Upload Your Resume</h2>
+
+<p>
+Upload your resume in PDF or DOCX format and let AI analyze
+your ATS score, strengths, weaknesses, and missing skills.
+</p>
+
 </div>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# Feature Overview
-# -----------------------------
-with st.container(border=True):
+    uploaded_file = st.file_uploader(
+        "",
+        type=["pdf", "docx"],
+        label_visibility="collapsed"
+    )
 
-    st.markdown("### ✨ What You'll Receive")
+    return uploaded_file
 
-    c1, c2 = st.columns(2)
+# =====================================================
+# MAIN
+# =====================================================
 
-    with c1:
-        st.markdown("""
-- ✅ ATS Score
-- ✅ Resume Strengths
-- ✅ Missing Skills
-""")
+render_hero()
 
-    with c2:
-        st.markdown("""
-- ✅ Weaknesses Detection
-- ✅ Improvement Suggestions
-- ✅ Downloadable PDF Report
-""")
+render_features()
 
-st.write("")
+uploaded_file = render_upload()
 
-# -----------------------------
-# Upload Resume
-# -----------------------------
-uploaded_file = st.file_uploader(
-    "📄 Upload Your Resume",
-    type=["pdf", "docx"],
-    help="Supported formats: PDF and DOCX"
-)
-
-# -----------------------------
-# Analyze
-# -----------------------------
 if uploaded_file:
-
-    st.success(f"✅ **{uploaded_file.name}** uploaded successfully.")
 
     if st.button("🚀 Analyze Resume", use_container_width=True):
 
-        with st.spinner("🤖 Gemini AI is analyzing your resume..."):
+        with st.spinner("🤖 AI is analyzing your resume..."):
 
-            try:
+            with tempfile.NamedTemporaryFile(
+    delete=False,
+    suffix=os.path.splitext(uploaded_file.name)[1]
+) as tmp_file:
+                tmp_file.write(uploaded_file.getbuffer())
 
-                extension = os.path.splitext(uploaded_file.name)[1]
+                temp_path = tmp_file.name
 
-                with tempfile.NamedTemporaryFile(
-                    delete=False,
-                    suffix=extension
-                ) as temp_file:
+            os.makedirs("data/reports", exist_ok=True)
 
-                    temp_file.write(uploaded_file.getbuffer())
-                    temp_path = temp_file.name
+            report_path = "data/reports/resume_analysis.json"
 
-                analysis = resume_service.analyze_resume(
-                    file_path=temp_path,
-                    output_path="data/reports/report.txt"
-                )
+            analysis = resume_service.analyze_resume(
+                temp_path,
+                report_path
+            )
 
-                score = analysis["ats_score"]
 
-                st.success("🎉 Resume analyzed successfully!")
+            st.success("✅ Analysis Completed!")
 
-                st.divider()
+            # ==========================
+# Download PDF Button
+# ==========================
 
-                # -----------------------------
-                # ATS Score
-                # -----------------------------
-                st.markdown("## 📊 ATS Score")
+         
 
-                left, center, right = st.columns([1, 2, 1])
 
-                with center:
 
-                    st.metric(
-                        label="Overall Resume Score",
-                        value=f"{score}/100"
+            pdf_path = "data/reports/resume_report.pdf"
+
+            if os.path.exists(pdf_path):
+                with open(pdf_path, "rb") as pdf_file:
+                    st.download_button(
+                        label="📄 Download PDF Report",
+                        data=pdf_file,
+                        file_name="AI_Resume_Analysis_Report.pdf",
+                        mime="application/pdf",
+                        use_container_width=True
                     )
 
-                    st.progress(score / 100)
-
                 st.divider()
 
-                col1, col2 = st.columns(2, gap="large")
+            col1, col2, col3 = st.columns(3)
 
-                # -----------------------------
-                # Left Column
-                # -----------------------------
-                with col1:
+            with col1:
+                st.metric(
+                    "📊 ATS Score",
+                    f"{analysis.get('ats_score', 0)}%"
+                )
 
-                    with st.container(border=True):
+            with col2:
+                st.metric(
+                    "💪 Strengths",
+                    len(analysis.get("strengths", []))
+                )
 
-                        st.subheader("💪 Strengths")
+            with col3:
+                st.metric(
+                    "🎯 Missing Skills",
+                    len(analysis.get("missing_skills", []))
+                )
 
-                        for item in analysis["strengths"]:
-                            st.success(item)
+            st.divider()
 
-                    st.write("")
+            st.markdown(
+                f"""
+                <h3 style="color:white; margin-bottom:10px;">
+                    📊 ATS Score: {analysis['ats_score']}/100
+                </h3>
+                """,
+                unsafe_allow_html=True
+            )
 
-                    with st.container(border=True):
+            st.progress(analysis["ats_score"] / 100)
 
-                        st.subheader("🎯 Missing Skills")
+            score = analysis["ats_score"]
 
-                        for item in analysis["missing_skills"]:
-                            st.error(item)
+            if score >= 90:
+                st.success("🟢 Excellent Resume")
 
-                # -----------------------------
-                # Right Column
-                # -----------------------------
-                with col2:
+            elif score >= 75:
+                st.info("🔵 Good Resume")
 
-                    with st.container(border=True):
+            elif score >= 60:
+                st.warning("🟡 Average Resume")
 
-                        st.subheader("⚠️ Weaknesses")
+            else:
+                st.error("🔴 Needs Improvement")
 
-                        for item in analysis["weaknesses"]:
-                            st.warning(item)
+            st.markdown("""
+            <div class="result-card">
+                <h2>📑 Resume Analysis</h2>
+            </div>
+            """, unsafe_allow_html=True)
 
-                    st.write("")
+            # ==========================
+            # Strengths
+            # ==========================
 
-                    with st.container(border=True):
+            st.markdown(
+                '<div class="result-heading">💪 Strengths</div>',
+                unsafe_allow_html=True
+            )
 
-                        st.subheader("💡 Suggestions")
+            for item in analysis.get("strengths", []):
+                st.markdown(
+                    f'<div class="result-item">✅ {item}</div>',
+                    unsafe_allow_html=True
+                )
 
-                        for item in analysis["suggestions"]:
-                            st.info(item)
+            # ==========================
+            # Weaknesses
+            # ==========================
 
-                st.divider()
+            st.markdown(
+                '<div class="result-heading">⚠️ Weaknesses</div>',
+                unsafe_allow_html=True
+            )
 
-                # -----------------------------
-                # Download PDF
-                # -----------------------------
-                pdf_path = "data/reports/resume_report.pdf"
+            for item in analysis.get("weaknesses", []):
+                st.markdown(
+                    f'<div class="result-item">❌ {item}</div>',
+                    unsafe_allow_html=True
+                )
 
-                if os.path.exists(pdf_path):
+            # ==========================
+            # Missing Skills
+            # ==========================
 
-                    with open(pdf_path, "rb") as pdf_file:
+            st.markdown(
+                '<div class="result-heading">🎯 Missing Skills</div>',
+                unsafe_allow_html=True
+            )
 
-                        st.download_button(
-                            label="📥 Download PDF Report",
-                            data=pdf_file,
-                            file_name="AI_Resume_Report.pdf",
-                            mime="application/pdf",
-                            use_container_width=True
-                        )
+            for item in analysis.get("missing_skills", []):
+                st.markdown(
+                    f'<div class="result-item">📌 {item}</div>',
+                    unsafe_allow_html=True
+                )
 
-            except Exception as e:
+            # ==========================
+            # Suggestions
+            # ==========================
 
-                st.error(f"❌ {str(e)}")
+            st.markdown(
+                '<div class="result-heading">💡 Suggestions</div>',
+                unsafe_allow_html=True
+            )
+
+            for item in analysis.get("suggestions", []):
+                st.markdown(
+                    f'<div class="result-item">👉 {item}</div>',
+                    unsafe_allow_html=True
+                )
+
+          
