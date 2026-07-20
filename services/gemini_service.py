@@ -8,11 +8,11 @@ from utils.logger import logger
 class GeminiService:
     def __init__(self):
         self.client = genai.Client(api_key=API_KEY)
-    
+
     # Analyze Resume
     def analyze_resume(self, resume_text: str) -> dict:
 
-    # Prompt
+        # Prompt
         prompt = f"""
 You are an ATS Resume Expert.
 
@@ -40,15 +40,18 @@ Resume:
 
         try:
             response = None
+
             for _ in range(3):
                 try:
                     response = self.client.models.generate_content(
                         model="gemini-2.5-flash",
-                        contents=prompt
+                        contents=prompt,
                     )
                     break
-                except Exception:
-                    time.sleep(3)
+
+                except Exception as e:
+                    logger.error(f"Gemini API Error: {e}")
+                    raise
 
             if response is None:
                 raise Exception("Gemini API is currently unavailable. Please try again.")
