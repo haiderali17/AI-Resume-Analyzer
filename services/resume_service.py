@@ -1,5 +1,5 @@
 import json
-from services.gemini_service import GeminiService
+from services.groq_service import GroqService
 from utils.file_handler import FileHandler
 from utils.pdf_generator import PDFGenerator
 
@@ -7,7 +7,7 @@ from utils.pdf_generator import PDFGenerator
 class ResumeService:
     def __init__(self):
         self.file_handler = FileHandler()
-        self.gemini = GeminiService()
+        self.groq = GroqService()
         self.pdf = PDFGenerator()
 
     def analyze_resume(
@@ -18,7 +18,7 @@ class ResumeService:
 
         resume_text = self.file_handler.read_file(file_path)
 
-        analysis = self.gemini.analyze_resume(resume_text)
+        analysis = self.groq.analyze_resume(resume_text)
 
         self.file_handler.save_report(
             output_path,

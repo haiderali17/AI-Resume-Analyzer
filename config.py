@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 try:
-    API_KEY = st.secrets["GEMINI_API_KEY"]
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 except Exception:
-    API_KEY = os.getenv("GEMINI_API_KEY")
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not API_KEY:
-    raise ValueError("GEMINI_API_KEY not found.")
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY not found.")
