@@ -1,18 +1,17 @@
 """
 Module: logger.py
 
-
 Purpose:
 Configure application logging for the entire application.
-
-Responsibilities:
-- Configure logging once
-- Log messages to terminal
-- Log messages to app.log
 """
 
+import os
 import logging
-level = logging.basicConfig(
+
+# Create logs directory if it doesn't exist
+os.makedirs("logs", exist_ok=True)
+
+logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
