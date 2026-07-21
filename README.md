@@ -195,6 +195,8 @@ Upload Resume
 Extract Resume Text
       │
       ▼
+Validate Resume/CV
+      ↓
 Send Resume to Groq Llama 3.3
       │
       ▼

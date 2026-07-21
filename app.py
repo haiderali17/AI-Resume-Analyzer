@@ -135,6 +135,7 @@ your ATS score, strengths, weaknesses, and missing skills.
 # MAIN
 # =====================================================
 
+
 render_hero()
 
 render_features()
@@ -148,29 +149,38 @@ if uploaded_file:
         with st.spinner("🤖 AI is analyzing your resume..."):
 
             with tempfile.NamedTemporaryFile(
-    delete=False,
-    suffix=os.path.splitext(uploaded_file.name)[1]
-) as tmp_file:
-                tmp_file.write(uploaded_file.getbuffer())
+                delete=False,
+                suffix=os.path.splitext(uploaded_file.name)[1]
+            ) as tmp_file:
 
+                tmp_file.write(uploaded_file.getbuffer())
                 temp_path = tmp_file.name
 
             os.makedirs("data/reports", exist_ok=True)
 
             report_path = "data/reports/resume_analysis.json"
 
-            analysis = resume_service.analyze_resume(
-                temp_path,
-                report_path
-            )
+            try:
+                analysis = resume_service.analyze_resume(
+                    temp_path,
+                    report_path
+                )
 
+            except ValueError as e:
+                st.error(
+                    f"❌ {str(e)}\n\nPlease upload a valid Resume or CV in PDF or DOCX format."
+                )
+                st.stop()
+
+            except Exception:
+                st.error("❌ Something went wrong while analyzing the resume.")
+                st.stop()
 
             st.success("✅ Analysis Completed!")
 
             # ==========================
-# Download PDF Button
-# ==========================
-
+            # Download PDF Button
+            # ==========================
          
 
 
