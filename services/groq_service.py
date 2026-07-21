@@ -15,34 +15,67 @@ class GroqService:
     def validate_resume(self, resume_text: str) -> dict:
 
         prompt = f"""
-You are a document classifier.
+You are an expert HR document classifier.
 
-Determine whether the following document is a Resume/CV.
+Your ONLY job is to determine whether the uploaded document is an actual Resume/CV.
 
-Return ONLY valid JSON in this format:
+A valid Resume/CV is a document created by a candidate to present their qualifications for a job.
+
+A Resume/CV usually contains MOST of these sections:
+- Candidate Name
+- Contact Information
+- Email
+- Phone Number
+- Skills
+- Education
+- Work Experience
+- Projects
+- Certifications
+- Achievements
+- Technical Skills
+
+The following are NOT resumes:
+- Internship Offer Letter
+- Internship Completion Letter
+- Appointment Letter
+- Joining Letter
+- Offer Letter
+- Experience Certificate
+- Recommendation Letter
+- Character Certificate
+- Degree Certificate
+- Research Paper
+- Assignment
+- Article
+- Book
+- Invoice
+- Receipt
+- Bank Statement
+- Government Letter
+- Legal Document
+- Any letter beginning with "Dear"
+- Any document congratulating or offering a position
+
+Return ONLY valid JSON.
+
+If the document is NOT a Resume/CV:
+
+{{
+    "is_resume": false,
+    "confidence": 0,
+    "reason": "The uploaded document is not a Resume/CV."
+}}
+
+If it IS a Resume/CV:
 
 {{
     "is_resume": true,
     "confidence": 95,
-    "reason": "Short explanation"
+    "reason": "The uploaded document is a Resume/CV."
 }}
 
-Rules:
-- Return ONLY valid JSON.
-- No markdown.
-- No extra text.
-- confidence must be between 0 and 100.
-A valid resume/CV usually contains most of the following:
-- Candidate name
-- Contact information
-- Work experience
-- Education
-- Skills
-- Projects, Certifications or Achievements
-
-Do NOT classify assignments, research papers, books, invoices, articles, reports, or generic documents as resumes.
-
 Document:
+
 {resume_text}
 """
 
@@ -61,16 +94,21 @@ Document:
 
         if text.startswith("```json"):
             text = text.replace("```json", "").replace("```", "").strip()
-
         elif text.startswith("```"):
-            text = text.replace("```", "").strip()
+            text = text.replace("```", "").replace("```", "").strip()
 
         start = text.find("{")
         end = text.rfind("}")
 
+        if start == -1 or end == -1:
+            raise ValueError("AI returned an invalid response during resume validation.")
+
         text = text[start:end + 1]
 
-        result = json.loads(text)
+        try:
+            result = json.loads(text)
+        except json.JSONDecodeError:
+            raise ValueError("Failed to parse AI validation response.")
 
         logger.info("Resume validation completed.")
 
@@ -84,7 +122,7 @@ Document:
         prompt = f"""
 You are an ATS Resume Expert.
 
-Analyze the following resume.
+Analyze ONLY valid resumes.
 
 Return ONLY valid JSON.
 
@@ -98,11 +136,10 @@ Return ONLY valid JSON.
 
 Rules:
 - Return ONLY valid JSON.
-- Do NOT use markdown.
-- Do NOT explain anything.
 - ATS Score must be between 0 and 100.
 
 Resume:
+
 {resume_text}
 """
 
@@ -121,16 +158,21 @@ Resume:
 
         if text.startswith("```json"):
             text = text.replace("```json", "").replace("```", "").strip()
-
         elif text.startswith("```"):
-            text = text.replace("```", "").strip()
+            text = text.replace("```", "").replace("```", "").strip()
 
         start = text.find("{")
         end = text.rfind("}")
 
+        if start == -1 or end == -1:
+            raise ValueError("AI returned an invalid response during resume analysis.")
+
         text = text[start:end + 1]
 
-        result = json.loads(text)
+        try:
+            result = json.loads(text)
+        except json.JSONDecodeError:
+            raise ValueError("Failed to parse AI analysis response.")
 
         logger.info("Resume analyzed successfully.")
 
