@@ -10,68 +10,89 @@ class GroqService:
         self.client = Groq(api_key=GROQ_API_KEY)
 
     # -----------------------------
-    # Resume Validation
+    # Resume / CV Validation
     # -----------------------------
     def validate_resume(self, resume_text: str) -> dict:
 
         prompt = f"""
 You are an expert HR document classifier.
 
-Your ONLY job is to determine whether the uploaded document is an actual Resume/CV.
+Your task is to determine whether the uploaded document is intended to present a person's qualifications for employment, internships, freelance work, higher education, or academic opportunities.
 
-A valid Resume/CV is a document created by a candidate to present their qualifications for a job.
+Treat BOTH resumes and CVs as VALID.
 
-A Resume/CV usually contains MOST of these sections:
-- Candidate Name
+A valid Resume/CV may belong to:
+- Student
+- Fresh Graduate
+- Experienced Professional
+- Career Changer
+- Freelancer
+- Researcher
+- Academic
+
+A Resume/CV DOES NOT need every standard section.
+
+It may contain only a few of these:
+- Name
 - Contact Information
 - Email
 - Phone Number
-- Skills
+- LinkedIn / Portfolio
+- Objective / Summary
 - Education
-- Work Experience
+- Skills
+- Technical Skills
 - Projects
+- Experience
+- Internships
 - Certifications
 - Achievements
-- Technical Skills
+- Research
+- Publications
+- Awards
+- Languages
 
-The following are NOT resumes:
-- Internship Offer Letter
-- Internship Completion Letter
+Accept different layouts and writing styles.
+
+Return is_resume = false ONLY if the document is clearly NOT a Resume/CV.
+
+Examples of invalid documents:
+- Offer Letter
 - Appointment Letter
 - Joining Letter
-- Offer Letter
+- Internship Letter
 - Experience Certificate
-- Recommendation Letter
 - Character Certificate
 - Degree Certificate
-- Research Paper
-- Assignment
-- Article
-- Book
 - Invoice
 - Receipt
 - Bank Statement
-- Government Letter
+- Government Document
 - Legal Document
-- Any letter beginning with "Dear"
-- Any document congratulating or offering a position
+- Assignment
+- Book
+- Article
+- Research Paper
+- Advertisement
+- Empty Document
+- Corrupted / unreadable text
 
 Return ONLY valid JSON.
 
-If the document is NOT a Resume/CV:
+If NOT Resume/CV:
 
 {{
     "is_resume": false,
-    "confidence": 0,
-    "reason": "The uploaded document is not a Resume/CV."
+    "confidence": 95,
+    "reason": "The uploaded document is not a Resume or CV."
 }}
 
-If it IS a Resume/CV:
+If Resume/CV:
 
 {{
     "is_resume": true,
     "confidence": 95,
-    "reason": "The uploaded document is a Resume/CV."
+    "reason": "The uploaded document is a valid Resume or CV."
 }}
 
 Document:
@@ -101,7 +122,7 @@ Document:
         end = text.rfind("}")
 
         if start == -1 or end == -1:
-            raise ValueError("AI returned an invalid response during resume validation.")
+            raise ValueError("AI returned an invalid response during Resume/CV validation.")
 
         text = text[start:end + 1]
 
@@ -110,21 +131,70 @@ Document:
         except json.JSONDecodeError:
             raise ValueError("Failed to parse AI validation response.")
 
-        logger.info("Resume validation completed.")
+        logger.info("Resume/CV validation completed.")
 
         return result
 
     # -----------------------------
-    # Resume Analysis
+    # Resume / CV Analysis
     # -----------------------------
     def analyze_resume(self, resume_text: str) -> dict:
 
         prompt = f"""
-You are an ATS Resume Expert.
+You are a Senior HR Recruiter, ATS Expert, and Career Coach.
 
-Analyze ONLY valid resumes.
+Analyze the uploaded Resume or CV professionally.
+
+Treat BOTH resumes and CVs as valid.
+
+Do NOT reject a Resume/CV because:
+- It belongs to a student
+- It belongs to a fresher
+- It has no work experience
+- It is an academic CV
+- It contains projects instead of experience
+
+If experience is missing, evaluate:
+- Education
+- Projects
+- Skills
+- Certifications
+- Achievements
+- Technical Strength
+
+Evaluate the Resume/CV based on:
+
+1. ATS Compatibility
+2. Skills
+3. Technical Skills
+4. Projects
+5. Experience (if available)
+6. Education
+7. Certifications
+8. Overall Presentation
+
+ATS Score Guidelines
+
+90-100
+Outstanding
+
+75-89
+Strong
+
+60-74
+Average
+
+40-59
+Needs Improvement
+
+Below 40
+Very Weak
+
+Provide practical and constructive feedback.
 
 Return ONLY valid JSON.
+
+Format:
 
 {{
     "ats_score": 0,
@@ -135,10 +205,18 @@ Return ONLY valid JSON.
 }}
 
 Rules:
-- Return ONLY valid JSON.
-- ATS Score must be between 0 and 100.
 
-Resume:
+- Return ONLY JSON.
+- ATS score must be between 0 and 100.
+- Give at least 3 strengths whenever possible.
+- Give at least 3 weaknesses if applicable.
+- Give realistic missing skills.
+- Suggestions must be practical and actionable.
+- Do not invent fake experience.
+- Do not criticize missing experience for students if they have projects.
+- Evaluate fairly.
+
+Resume/CV:
 
 {resume_text}
 """
@@ -165,7 +243,7 @@ Resume:
         end = text.rfind("}")
 
         if start == -1 or end == -1:
-            raise ValueError("AI returned an invalid response during resume analysis.")
+            raise ValueError("AI returned an invalid response during Resume/CV analysis.")
 
         text = text[start:end + 1]
 
@@ -174,6 +252,6 @@ Resume:
         except json.JSONDecodeError:
             raise ValueError("Failed to parse AI analysis response.")
 
-        logger.info("Resume analyzed successfully.")
+        logger.info("Resume/CV analyzed successfully.")
 
         return result

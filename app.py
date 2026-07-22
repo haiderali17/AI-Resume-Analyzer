@@ -11,7 +11,7 @@ from services.resume_service import ResumeService
 # =====================================================
 
 st.set_page_config(
-    page_title="AI Resume Analyzer",
+    page_title="AI Resume & CV Analyzer",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -61,14 +61,11 @@ def render_hero():
 </div>
 
 <div class="title">
-🤖 AI Resume Analyzer
+🤖 AI Resume & CV Analyzer
 </div>
 
 <div class="subtitle">
-Upload your resume and receive an AI-powered ATS analysis,
-missing skills,
-personalized feedback,
-and professional improvement suggestions in seconds.
+Upload your Resume or CV and receive an AI-powered ATS analysis, identify missing skills, receive personalized feedback, and download a professional PDF report in seconds.
 </div>
 
 </div>
@@ -113,11 +110,10 @@ def render_upload():
 📄
 </div>
 
-<h2>Upload Your Resume</h2>
+<h2>Upload Your Resume or CV</h2>
 
 <p>
-Upload your resume in PDF or DOCX format and let AI analyze
-your ATS score, strengths, weaknesses, and missing skills.
+Upload your Resume or CV in PDF or DOCX format. Our AI will evaluate ATS compatibility, strengths, weaknesses, missing skills, and provide personalized suggestions.
 </p>
 
 </div>
@@ -144,9 +140,9 @@ uploaded_file = render_upload()
 
 if uploaded_file:
 
-    if st.button("🚀 Analyze Resume", use_container_width=True):
+    if st.button("🚀 Analyze Resume/CV", use_container_width=True):
 
-        with st.spinner("🤖 AI is analyzing your resume..."):
+        with st.spinner("🤖 AI is analyzing your resume/CV..."):
 
             with tempfile.NamedTemporaryFile(
                 delete=False,
@@ -184,20 +180,23 @@ if uploaded_file:
          
 
 
-
             pdf_path = "data/reports/resume_report.pdf"
 
             if os.path.exists(pdf_path):
                 with open(pdf_path, "rb") as pdf_file:
                     st.download_button(
-                        label="📄 Download PDF Report",
+                        label="📄 Download Analysis Report",
                         data=pdf_file,
-                        file_name="AI_Resume_Analysis_Report.pdf",
+                        file_name="AI_Resume_CV_Analysis_Report.pdf",
                         mime="application/pdf",
                         use_container_width=True
                     )
 
                 st.divider()
+
+            # ==========================
+            # Summary Metrics
+            # ==========================
 
             col1, col2, col3 = st.columns(3)
 
@@ -224,7 +223,7 @@ if uploaded_file:
             st.markdown(
                 f"""
                 <h3 style="color:white; margin-bottom:10px;">
-                    📊 ATS Score: {analysis['ats_score']}/100
+                    📊 ATS Compatibility Score: {analysis['ats_score']}/100
                 </h3>
                 """,
                 unsafe_allow_html=True
@@ -235,20 +234,23 @@ if uploaded_file:
             score = analysis["ats_score"]
 
             if score >= 90:
-                st.success("🟢 Excellent Resume")
+                st.success("🟢 Outstanding Resume / CV")
 
             elif score >= 75:
-                st.info("🔵 Good Resume")
+                st.info("🔵 Strong Resume / CV")
 
             elif score >= 60:
-                st.warning("🟡 Average Resume")
+                st.warning("🟡 Good Foundation — Needs Some Improvements")
+
+            elif score >= 40:
+                st.warning("🟠 Needs Significant Improvement")
 
             else:
-                st.error("🔴 Needs Improvement")
+                st.error("🔴 Resume / CV Requires Major Improvements")
 
             st.markdown("""
             <div class="result-card">
-                <h2>📑 Resume Analysis</h2>
+                <h2>📑 Resume / CV Analysis Report</h2>
             </div>
             """, unsafe_allow_html=True)
 
@@ -257,7 +259,7 @@ if uploaded_file:
             # ==========================
 
             st.markdown(
-                '<div class="result-heading">💪 Strengths</div>',
+                '<div class="result-heading">💪 Key Strengths</div>',
                 unsafe_allow_html=True
             )
 
@@ -272,7 +274,7 @@ if uploaded_file:
             # ==========================
 
             st.markdown(
-                '<div class="result-heading">⚠️ Weaknesses</div>',
+                '<div class="result-heading">⚠️ Areas for Improvement</div>',
                 unsafe_allow_html=True
             )
 
@@ -302,7 +304,7 @@ if uploaded_file:
             # ==========================
 
             st.markdown(
-                '<div class="result-heading">💡 Suggestions</div>',
+                '<div class="result-heading">💡 Personalized Suggestions</div>',
                 unsafe_allow_html=True
             )
 
@@ -311,5 +313,3 @@ if uploaded_file:
                     f'<div class="result-item">👉 {item}</div>',
                     unsafe_allow_html=True
                 )
-
-          
